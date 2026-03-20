@@ -8,4 +8,6 @@ add_executable(VMtranslator src/main.cpp
         src/cli.cpp
         src/Parser.cpp
         include/Parser.h
+        src/CodeWriter.cpp
+        include/CodeWriter.h
 )
