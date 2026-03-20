@@ -30,9 +30,9 @@ public:
     explicit Parser(const std::string &filePath);
     bool hasMoreCommands() const;
     void advance();
-    CommandType commandType();
-    std::string arg1();
-    std::string arg2();
+    CommandType commandType() const;
+    std::string arg1() const;
+    int arg2() const;
 };
 
 

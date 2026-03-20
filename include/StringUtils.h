@@ -14,4 +14,6 @@ bool startsWith(const std::string& str, char target);
 bool contains(const std::string& str, char target);
 bool isNumber(const std::string& str);
 
+std::vector<std::string> split(const std::string& str);
+
 #endif //VMTRANSLATOR_STRINGUTILS_H

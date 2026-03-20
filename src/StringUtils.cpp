@@ -5,6 +5,9 @@
 #include <string>
 #include "../include/StringUtils.h"
 
+#include <vector>
+#include <sstream>
+
 void trimStart(std::string& str) {
     if (str.empty()) {
         return;
@@ -76,4 +79,22 @@ bool isNumber(const std::string &str) {
     auto it = str.begin();
     while (it != str.end() && std::isdigit(*it)) ++it;
     return !str.empty() && it == str.end();
+}
+
+std::vector<std::string> split(const std::string &str) {
+    // variable to store token obtained from the original string
+    std::string s;
+
+    // constructing stream from the string
+    std::stringstream ss(str);
+
+    // declaring vector to store the string after split
+    std::vector<std::string> v;
+
+    while (getline(ss, s, ' ')) {
+        // store token string in the vector
+        v.push_back(s);
+    }
+
+    return v;
 }
