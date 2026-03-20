@@ -5,7 +5,7 @@
 #include <string>
 #include "../include/StringUtils.h"
 
-void TrimStart(std::string& str) {
+void trimStart(std::string& str) {
     if (str.empty()) {
         return;
     }
@@ -20,7 +20,7 @@ void TrimStart(std::string& str) {
     }
 }
 
-void TrimEnd(std::string& str) {
+void trimEnd(std::string& str) {
     if (str.empty()) {
         return;
     }
@@ -37,16 +37,19 @@ void TrimEnd(std::string& str) {
     }
 }
 
-void Trim(std::string& str) {
+void trim(std::string& str) {
     if (str.empty()) {
         return;
     }
 
-    TrimStart(str);
-    TrimEnd(str);
+    trimStart(str);
+    trimEnd(str);
+
+    std::erase(str, '\n');
+    std::erase(str, '\r');
 }
 
-bool StartsWith(const std::string& str, const char target) {
+bool startsWith(const std::string& str, const char target) {
     if (str.empty()) {
         return false;
     }
@@ -62,15 +65,15 @@ bool StartsWith(const std::string& str, const char target) {
     return false;
 }
 
-bool Contains(const std::string& str, const char target) {
+bool contains(const std::string& str, const char target) {
     if (str.find(target) != -1) {
         return true;
     }
     return false;
 }
 
-bool IsNumber(const std::string &str) {
-    std::string::const_iterator it = str.begin();
+bool isNumber(const std::string &str) {
+    auto it = str.begin();
     while (it != str.end() && std::isdigit(*it)) ++it;
     return !str.empty() && it == str.end();
 }

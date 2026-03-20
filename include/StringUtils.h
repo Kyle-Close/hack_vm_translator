@@ -6,12 +6,12 @@
 #define VMTRANSLATOR_STRINGUTILS_H
 #include <string>
 
-void TrimStart(std::string& str);
-void TrimEnd(std::string& str);
-void Trim(std::string& str);
+void trimStart(std::string& str);
+void trimEnd(std::string& str);
+void trim(std::string& str);
 
-bool StartsWith(const std::string& str, char target);
-bool Contains(const std::string& str, char target);
-bool IsNumber(const std::string& str);
+bool startsWith(const std::string& str, char target);
+bool contains(const std::string& str, char target);
+bool isNumber(const std::string& str);
 
 #endif //VMTRANSLATOR_STRINGUTILS_H
