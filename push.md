@@ -3,7 +3,7 @@ push constant 17
 @17
 D=A
 
-@SP -> RAM[0] (M=258)
+@SP
 A=M
 M=D
 

@@ -15,11 +15,17 @@ class CodeWriter {
     std::ofstream outFile;
     std::string currentVmFileName;
 
+    void writeLine(const std::string&);
+    void pushConstant(unsigned int);
+    void pushArgLclThisThat(const std::string&, unsigned int);
+    void pushStatic(unsigned int);
+    void pushTemp(unsigned int);
+    void pushThisOrThat(unsigned int);
 public:
     explicit CodeWriter(const std::string&);
     void setFileName(const std::string&);
     void writeArithmetic(const std::string&);
-    void writePushPop(CommandType, std::string&, unsigned int);
+    void writePushPop(CommandType, const std::string&, unsigned int);
 };
 
 
