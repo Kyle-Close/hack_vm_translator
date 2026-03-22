@@ -8,7 +8,9 @@
 #include <iostream>
 
 
-CodeWriter::CodeWriter(const std::string &outFileName) : outFile(outFileName) {}
+CodeWriter::CodeWriter(const std::string &outFileName) : outFile(outFileName.substr(0, outFileName.rfind('.')) + ".asm") {
+    std::cerr << "CodeWriter output: " << outFileName.substr(0, outFileName.rfind('.')) + ".asm" << std::endl;
+}
 
 void CodeWriter::setFileName(const std::string &fn) {
     currentVmFileName = fn;
