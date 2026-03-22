@@ -33,11 +33,28 @@ void CodeWriter::writePushPop(const CommandType commandType, const std::string &
             } else if (segment == "temp") {
                 pushTemp(index);
                 break;
-            } else if (segment == "this" || segment == "that") {
-                pushThisOrThat(index);
+            } else if (segment == "pointer") {
+                pushPointer(index);
                 break;
             } else {
                 std::cerr << "Invalid segment on C_PUSH command: " << segment << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        case C_POP:
+            if (segment == "argument" || segment == "local" || segment == "this" || segment == "that") {
+                popArgLclThisThat(segment, index);
+                break;
+            } else if (segment == "static") {
+                popStatic(index);
+                break;
+            } else if (segment == "temp") {
+                popTemp(index);
+                break;
+            } else if (segment == "pointer") {
+                popPointer(index);
+                break;
+            } else {
+                std::cerr << "Invalid segment on C_POP command: " << segment << std::endl;
                 exit(EXIT_FAILURE);
             }
         default:
@@ -104,7 +121,7 @@ void CodeWriter::pushTemp(const unsigned int index) {
     writeLine("M=M+1");
 }
 
-void CodeWriter::pushThisOrThat(const unsigned int index) {
+void CodeWriter::pushPointer(const unsigned int index) {
     writeLine(std::format("@{}", index == 0 ? 3 : 4));
     writeLine("D=M");
     writeLine("@SP");
@@ -112,4 +129,63 @@ void CodeWriter::pushThisOrThat(const unsigned int index) {
     writeLine("M=D");
     writeLine("@SP");
     writeLine("M=M+1");
+}
+
+void CodeWriter::popArgLclThisThat(const std::string &seg, const unsigned int index) {
+    std::string segSymbol;
+    if (seg == "argument") {
+        segSymbol = "ARG";
+    } else if (seg == "local") {
+        segSymbol = "LCL";
+    } else if (seg == "this") {
+        segSymbol = "THIS";
+    } else if (seg == "that") {
+        segSymbol = "THAT";
+    }
+
+    writeLine(std::format("@{}", segSymbol));
+    writeLine("D=M");
+    writeLine(std::format("@{}", index));
+    writeLine("D=D+A");
+    writeLine("@R13");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine("@R13");
+    writeLine("A=M");
+    writeLine("M=D");
+}
+
+void CodeWriter::popStatic(const unsigned int index) {
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine(std::format("{}.{}", currentVmFileName, index));
+    writeLine("M=D");
+}
+
+void CodeWriter::popTemp(const unsigned int index) {
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine(std::format("@{}", 5 + index));
+    writeLine("M=D");
+}
+
+void CodeWriter::popPointer(const unsigned int index) {
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine(std::format("@{}", index == 0 ? 3 : 4));
+    writeLine("M=D");
 }

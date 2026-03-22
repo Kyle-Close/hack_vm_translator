@@ -20,7 +20,11 @@ class CodeWriter {
     void pushArgLclThisThat(const std::string&, unsigned int);
     void pushStatic(unsigned int);
     void pushTemp(unsigned int);
-    void pushThisOrThat(unsigned int);
+    void pushPointer(unsigned int);
+    void popArgLclThisThat(const std::string&, unsigned int);
+    void popStatic(unsigned int);
+    void popTemp(unsigned int);
+    void popPointer(unsigned int);
 public:
     explicit CodeWriter(const std::string&);
     void setFileName(const std::string&);
