@@ -14,6 +14,7 @@
 class CodeWriter {
     std::ofstream outFile;
     std::string currentVmFileName;
+    unsigned int branchCount = 0;
 
     void writeLine(const std::string&);
     void pushConstant(unsigned int);
@@ -25,6 +26,9 @@ class CodeWriter {
     void popStatic(unsigned int);
     void popTemp(unsigned int);
     void popPointer(unsigned int);
+    void addSubAndOr(const std::string&);
+    void negOrNot(bool isNeg);
+    void branch(const std::string&);
 public:
     explicit CodeWriter(const std::string&);
     void setFileName(const std::string&);

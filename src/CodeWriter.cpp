@@ -15,7 +15,17 @@ void CodeWriter::setFileName(const std::string &fn) {
 }
 
 void CodeWriter::writeArithmetic(const std::string &command) {
-
+    if (command == "add" || command == "sub" ||
+        command == "and" || command == "or") {
+        addSubAndOr(command);
+    } else if (command == "neg" || command == "not") {
+        negOrNot(command == "neg");
+    } else if (command == "eq" || command == "gt" || command == "lt") {
+        branch(command);
+    } else {
+        std::cerr << "Invalid command passed to writeArithmetic: " << command << std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 void CodeWriter::writePushPop(const CommandType commandType, const std::string &segment, const unsigned int index) {
@@ -188,4 +198,67 @@ void CodeWriter::popPointer(const unsigned int index) {
     writeLine("M=M-1");
     writeLine(std::format("@{}", index == 0 ? 3 : 4));
     writeLine("M=D");
+}
+
+void CodeWriter::addSubAndOr(const std::string &command) {
+    std::string op;
+    if (command == "add") {
+        op = "+";
+    } else if (command == "sub") {
+        op = "-";
+    } else if (command == "and") {
+        op = "&";
+    } else if (command == "or") {
+        op = "|";
+    } else {
+        std::cerr << "Invalid command passed to addSubAndOr: " << command << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine("A=M-1");
+    if (command == "sub") {
+        writeLine(std::format("D=M{}D", op));
+    } else {
+        writeLine(std::format("D=D{}M", op));
+    }
+    writeLine("M=D");
+}
+
+void CodeWriter::negOrNot(const bool isNeg) {
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine(std::format("M={}M", isNeg ? "-" : "!"));
+}
+
+void CodeWriter::branch(const std::string &command) {
+    std::string jmpOp;
+    if (command == "eq") {
+        jmpOp = "JEQ";
+    } else if (command == "gt") {
+        jmpOp = "JGT";
+    } else if (command == "lt") {
+        jmpOp = "JLT";
+    }
+
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine("A=M-1");
+    writeLine("D=M-D");
+    writeLine(std::format("@BRANCH_TRUE_{}", branchCount));
+    writeLine(std::format("D;{}", jmpOp));
+    writeLine("M=0");
+    writeLine(std::format("@END_{}", branchCount));
+    writeLine("0;JMP");
+    writeLine(std::format("(BRANCH_TRUE_{})", branchCount));
+    writeLine("M=-1");
+    writeLine(std::format("(END_{})", branchCount));
+    branchCount++;
 }
