@@ -16,10 +16,6 @@ Parser::Parser(const std::string &filePath) {
         exit(EXIT_FAILURE);
     }
 
-    file.seekg(0, std::ios::end);
-    std::cerr << "file size: " << file.tellg() << std::endl;
-    file.seekg(0, std::ios::beg);
-
     std::string line;
     while (std::getline(file, line)) {
         trim(line);

@@ -15,8 +15,10 @@ int main(const int argc, char *argv[]) {
 
     auto cw = CodeWriter(filePaths[0]);
 
+
+    unsigned int i = 0;
     for (const auto& filePath : filePaths) {
-        std::cerr << "cwd: " << std::filesystem::current_path() << std::endl;
+        cw.setFileName(filePaths[i].substr(0, filePaths[i].length() - 3));
         auto parser = Parser(filePath);
 
         while (parser.hasMoreCommands()) {
@@ -32,6 +34,7 @@ int main(const int argc, char *argv[]) {
                 exit(EXIT_FAILURE);
             }
         }
+        i++;
     }
 
     return 0;

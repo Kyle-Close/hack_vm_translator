@@ -8,9 +8,7 @@
 #include <iostream>
 
 
-CodeWriter::CodeWriter(const std::string &outFileName) : outFile(outFileName.substr(0, outFileName.rfind('.')) + ".asm") {
-    std::cerr << "CodeWriter output: " << outFileName.substr(0, outFileName.rfind('.')) + ".asm" << std::endl;
-}
+CodeWriter::CodeWriter(const std::string &outFileName) : outFile(outFileName.substr(0, outFileName.rfind('.')) + ".asm") {}
 
 void CodeWriter::setFileName(const std::string &fn) {
     currentVmFileName = fn;
@@ -177,13 +175,12 @@ void CodeWriter::popStatic(const unsigned int index) {
     writeLine("D=M");
     writeLine("@SP");
     writeLine("M=M-1");
-    writeLine(std::format("{}.{}", currentVmFileName, index));
+    writeLine(std::format("@{}.{}", currentVmFileName, index));
     writeLine("M=D");
 }
 
 void CodeWriter::popTemp(const unsigned int index) {
     writeLine("@SP");
-    writeLine("A=M-1");
     writeLine("A=M-1");
     writeLine("D=M");
     writeLine("@SP");
