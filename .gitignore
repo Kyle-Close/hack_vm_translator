@@ -8,3 +8,4 @@ build/
 *.out
 
 vm_files/
+*.zip

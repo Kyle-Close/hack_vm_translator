@@ -1,13 +1,13 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.14)
 project(VMtranslator)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(VMtranslator src/main.cpp
-        src/StringUtils.cpp
-        src/cli.cpp
-        src/Parser.cpp
-        include/Parser.h
-        src/CodeWriter.cpp
-        include/CodeWriter.h
+add_executable(VMtranslator main.cpp
+        StringUtils.cpp
+        cli.cpp
+        Parser.cpp
+        Parser.h
+        CodeWriter.cpp
+        CodeWriter.h
 )
