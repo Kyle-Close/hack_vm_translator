@@ -39,7 +39,15 @@ int main(const int argc, char *argv[]) {
                 cw.writeArithmetic(parser.arg1());
             } else if (ct == C_PUSH || ct == C_POP) {
                 cw.writePushPop(ct, parser.arg1(), parser.arg2());
-            } else {
+            } else if (ct == C_LABEL) {
+                cw.writeLabel(parser.arg1());
+            } else if (ct == C_GOTO) {
+                cw.writeGoTo(parser.arg1());
+            } else if (ct == C_IF) {
+                cw.writeIf(parser.arg1());
+            }
+
+            else {
                 std::cerr << "NOT YET IMPLEMENTED" << std::endl;
                 exit(EXIT_FAILURE);
             }

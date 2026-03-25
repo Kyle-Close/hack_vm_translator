@@ -9,3 +9,5 @@ build/
 
 vm_files/
 *.zip
+*.asm
+*.vm

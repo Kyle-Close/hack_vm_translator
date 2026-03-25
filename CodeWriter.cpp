@@ -72,6 +72,31 @@ void CodeWriter::writePushPop(const CommandType commandType, const std::string &
     }
 }
 
+void CodeWriter::writeLabel(const std::string &label) {
+    writeLine("(" + currentFn + "$" + label + ")");
+}
+
+void CodeWriter::writeGoTo(const std::string &label) {
+    writeLine("@" + currentFn + "$" + label);
+    writeLine("0;JMP");
+}
+
+void CodeWriter::writeIf(const std::string &label) {
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("M=M-1");
+    writeLine("@" + currentFn + "$" + label);
+    writeLine("D;JNE");
+}
+
+void CodeWriter::writeFunction(const std::string &functionName, unsigned int nVars) {
+    // 1. Set new currentFn
+    currentFn = functionName;
+    // 2. TODO: Initialize local vars
+}
+
 void CodeWriter::writeLine(const std::string &line) {
     outFile << line << std::endl;
 }

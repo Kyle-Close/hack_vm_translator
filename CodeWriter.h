@@ -14,6 +14,7 @@
 class CodeWriter {
     std::ofstream outFile;
     std::string currentVmFileName;
+    std::string currentFn = "null";
     unsigned int branchCount = 0;
 
     void writeLine(const std::string&);
@@ -34,6 +35,12 @@ public:
     void setFileName(const std::string&);
     void writeArithmetic(const std::string&);
     void writePushPop(CommandType, const std::string&, unsigned int);
+    void writeLabel(const std::string &label);
+    void writeGoTo(const std::string &label);
+    void writeIf(const std::string &label);
+    void writeFunction(const std::string &functionName, unsigned int nVars);
+    void writeCall(const std::string &functionName, unsigned int nArgs);
+    void writeReturn();
 };
 
 

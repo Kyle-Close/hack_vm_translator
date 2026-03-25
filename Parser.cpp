@@ -65,6 +65,15 @@ CommandType Parser::commandType() const {
     if (parts[0] == "pop") {
         return C_POP;
     }
+    if (parts[0] == "label") {
+        return C_LABEL;
+    }
+    if (parts[0] == "goto") {
+        return C_GOTO;
+    }
+    if (parts[0] == "if-goto") {
+        return C_IF;
+    }
 
     std::cerr << "Encountered unknown command (or command for project 8): " << c << std::endl;
     exit(EXIT_FAILURE);
