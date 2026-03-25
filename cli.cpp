@@ -4,7 +4,10 @@
 
 #include "cli.h"
 
+#include <experimental/filesystem>
 #include <iostream>
+#include <vector>
+
 
 std::vector<std::string> parseArgs(const int argc, char* argv[]) {
     if (argc != 2) {
@@ -24,7 +27,20 @@ std::vector<std::string> parseArgs(const int argc, char* argv[]) {
 
     std::vector<std::string> files;
 
-    if (arg.size() >= 3 && arg.substr(arg.size() - 3) == ".vm") {
+    if (std::experimental::filesystem::is_directory(arg)) {
+        auto it = std::experimental::filesystem::directory_iterator(arg);
+        const auto end = std::experimental::filesystem::directory_iterator();
+
+        while (it != end) {
+            const auto& dirEntry = *it;
+            if (dirEntry.path().extension() == ".vm") {
+                files.push_back(dirEntry.path().string());
+            }
+            ++it;
+        }
+        return files;
+    }
+    else if (std::experimental::filesystem::path(arg).extension() == ".vm") {
         files.push_back(arg);
         return files;
     }

@@ -11,3 +11,5 @@ add_executable(VMtranslator main.cpp
         CodeWriter.cpp
         CodeWriter.h
 )
+
+target_link_libraries(VMtranslator stdc++fs)

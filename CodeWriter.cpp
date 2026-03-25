@@ -91,10 +91,145 @@ void CodeWriter::writeIf(const std::string &label) {
     writeLine("D;JNE");
 }
 
-void CodeWriter::writeFunction(const std::string &functionName, unsigned int nVars) {
-    // 1. Set new currentFn
+void CodeWriter::writeFunction(const std::string &functionName, const unsigned int nVars) {
     currentFn = functionName;
-    // 2. TODO: Initialize local vars
+
+    writeLine("(" + functionName + ")");
+    for (int i = 0; i < nVars; i++) {
+        writeLine("@SP");
+        writeLine("A=M");
+        writeLine("M=0");
+        writeLine("@SP");
+        writeLine("M=M+1");
+    }
+}
+
+void CodeWriter::writeCall(const std::string &functionName, const unsigned int nArgs) {
+    writeLine("@" + functionName + "$" + "ret." + std::to_string(callCount));
+    writeLine("D=A");
+    writeLine("@SP");
+    writeLine("A=M");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("M=M+1");
+
+    writeLine("@LCL");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("A=M");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("M=M+1");
+
+    writeLine("@ARG");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("A=M");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("M=M+1");
+
+    writeLine("@THIS");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("A=M");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("M=M+1");
+
+    writeLine("@THAT");
+    writeLine("D=M");
+    writeLine("@SP");
+    writeLine("A=M");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("M=M+1");
+
+    writeLine("@SP");
+    writeLine("D=M");
+    writeLine("@LCL");
+    writeLine("M=D");
+
+    writeLine("@SP");
+    writeLine("D=M");
+    writeLine("@" + std::to_string(5 + nArgs));
+    writeLine("D=D-A");
+    writeLine("@ARG");
+    writeLine("M=D");
+
+    writeLine("@" + functionName);
+    writeLine("0;JMP");
+
+    writeLine("(" + functionName + "$ret." + std::to_string(callCount++) + ")");
+}
+
+void CodeWriter::writeReturn() {
+    writeLine("@LCL");
+    writeLine("D=M");
+    writeLine("@R13");
+    writeLine("M=D");
+
+    writeLine("D=M");
+    writeLine("@5");
+    writeLine("A=D-A");
+    writeLine("D=M");
+    writeLine("@R14");
+    writeLine("M=D");
+
+    writeLine("@SP");
+    writeLine("A=M-1");
+    writeLine("D=M");
+    writeLine("@ARG");
+    writeLine("A=M");
+    writeLine("M=D");
+
+    writeLine("D=A+1");
+    writeLine("@SP");
+    writeLine("M=D");
+
+    writeLine("@R13");
+    writeLine("D=M");
+    writeLine("@1");
+    writeLine("A=D-A");
+    writeLine("D=M");
+    writeLine("@THAT");
+    writeLine("M=D");
+
+    writeLine("@R13");
+    writeLine("D=M");
+    writeLine("@2");
+    writeLine("A=D-A");
+    writeLine("D=M");
+    writeLine("@THIS");
+    writeLine("M=D");
+
+    writeLine("@R13");
+    writeLine("D=M");
+    writeLine("@3");
+    writeLine("A=D-A");
+    writeLine("D=M");
+    writeLine("@ARG");
+    writeLine("M=D");
+
+    writeLine("@R13");
+    writeLine("D=M");
+    writeLine("@4");
+    writeLine("A=D-A");
+    writeLine("D=M");
+    writeLine("@LCL");
+    writeLine("M=D");
+
+    writeLine("@R14");
+    writeLine("A=M");
+    writeLine("0;JMP");
+}
+
+void CodeWriter::writeBootStrap() {
+    writeLine("@256");
+    writeLine("D=A");
+    writeLine("@SP");
+    writeLine("M=D");
+    writeCall("Sys.init", 0);
 }
 
 void CodeWriter::writeLine(const std::string &line) {

@@ -16,6 +16,7 @@ class CodeWriter {
     std::string currentVmFileName;
     std::string currentFn = "null";
     unsigned int branchCount = 0;
+    unsigned int callCount = 0;
 
     void writeLine(const std::string&);
     void pushConstant(unsigned int);
@@ -41,6 +42,7 @@ public:
     void writeFunction(const std::string &functionName, unsigned int nVars);
     void writeCall(const std::string &functionName, unsigned int nArgs);
     void writeReturn();
+    void writeBootStrap();
 };
 
 

@@ -24,8 +24,8 @@ Parser::Parser(const std::string &filePath) {
             const size_t pos = line.find('/');
             if (pos != std::string::npos) {
                 line.erase(pos);
-                trim(line);
             }
+            trim(line);
             lines.push_back(line);
         }
     }
@@ -75,8 +75,17 @@ CommandType Parser::commandType() const {
     if (parts[0] == "if-goto") {
         return C_IF;
     }
+    if (parts[0] == "function") {
+        return C_FUNCTION;
+    }
+    if (parts[0] == "call") {
+        return C_CALL;
+    }
+    if (parts[0] == "return") {
+        return C_RETURN;
+    }
 
-    std::cerr << "Encountered unknown command (or command for project 8): " << c << std::endl;
+    std::cerr << "Encountered unknown command: " << c << std::endl;
     exit(EXIT_FAILURE);
 }
 
@@ -95,7 +104,8 @@ std::string Parser::arg1() const {
 }
 
 int Parser::arg2() const {
-    if (commandType() == C_PUSH || commandType() == C_POP) {
+    if (commandType() == C_PUSH || commandType() == C_POP ||
+        commandType() == C_FUNCTION || commandType() == C_CALL) {
         const auto parts = split(currentCommand);
         if (parts.size() < 3) {
             std::cerr << "Attempted to get arg2 on line with less than 3 words: " << currentCommand << std::endl;

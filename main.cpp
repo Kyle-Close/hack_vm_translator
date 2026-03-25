@@ -13,7 +13,7 @@ int main(const int argc, char *argv[]) {
     }
 
     auto cw = CodeWriter(filePaths[0]);
-
+    cw.writeBootStrap();
 
     unsigned int i = 0;
     for (const auto& filePath : filePaths) {
@@ -45,10 +45,16 @@ int main(const int argc, char *argv[]) {
                 cw.writeGoTo(parser.arg1());
             } else if (ct == C_IF) {
                 cw.writeIf(parser.arg1());
+            } else if (ct == C_FUNCTION) {
+                cw.writeFunction(parser.arg1(), parser.arg2());
+            } else if (ct == C_CALL) {
+                cw.writeCall(parser.arg1(), parser.arg2());
+            } else if (ct == C_RETURN) {
+                cw.writeReturn();
             }
 
             else {
-                std::cerr << "NOT YET IMPLEMENTED" << std::endl;
+                std::cerr << "Unhandled command type encountered: " << ct << std::endl;
                 exit(EXIT_FAILURE);
             }
         }
