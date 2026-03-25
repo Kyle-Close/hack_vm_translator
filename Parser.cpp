@@ -24,6 +24,7 @@ Parser::Parser(const std::string &filePath) {
             const size_t pos = line.find('/');
             if (pos != std::string::npos) {
                 line.erase(pos);
+                trim(line);
             }
             lines.push_back(line);
         }
